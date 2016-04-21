@@ -35,10 +35,14 @@ enum packman_endianness {
 	PACKMAN_ENDIANNESS_BIG,
 };
 
-struct packman_encoding_int {
-	struct packman_encoding_base base;
+struct packman_int_description {
 	size_t size;
 	enum packman_endianness endianness;
+};
+
+struct packman_encoding_int {
+	struct packman_encoding_base base;
+	struct packman_int_description desc;
 };
 
 struct packman_encoding_struct {

@@ -15,8 +15,10 @@ static struct packman_encoding_int example_le16_encoding = {
 		.type = PACKMAN_ENCODING_INT,
 		.elem_size = sizeof(uint16_t),
 	},
-	.size = sizeof(uint16_t),
-	.endianness = PACKMAN_ENDIANNESS_LITTLE,
+	.desc = {
+		.size = sizeof(uint16_t),
+		.endianness = PACKMAN_ENDIANNESS_LITTLE,
+	},
 };
 
 static struct packman_encoding_int example_be16_encoding = {
@@ -24,8 +26,10 @@ static struct packman_encoding_int example_be16_encoding = {
 		.type = PACKMAN_ENCODING_INT,
 		.elem_size = sizeof(uint16_t),
 	},
-	.size = sizeof(uint16_t),
-	.endianness = PACKMAN_ENDIANNESS_BIG,
+	.desc = {
+		.size = sizeof(uint16_t),
+		.endianness = PACKMAN_ENDIANNESS_BIG,
+	},
 };
 
 static void example_encode_int(void)
