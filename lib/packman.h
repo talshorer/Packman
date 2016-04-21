@@ -27,6 +27,9 @@ struct packman_encoding_base {
 enum packman_error packman_encode(struct packman_encoding_base *,
 		const void *, void *, size_t);
 
+enum packman_error packman_decode(struct packman_encoding_base *,
+		void *, const void *, size_t);
+
 enum packman_endianness {
 	PACKMAN_ENDIANNESS_LITTLE,
 	PACKMAN_ENDIANNESS_BIG,
