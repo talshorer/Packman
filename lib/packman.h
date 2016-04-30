@@ -51,4 +51,11 @@ struct packman_encoding_struct {
 	unsigned nfields;
 };
 
+struct packman_encoding_enum {
+	struct packman_encoding_base base;
+	struct packman_int_description desc;
+	void *values; /* should be array of uint##n##_t */
+	unsigned nvalues;
+};
+
 #endif /* __PACKMAN_H */

@@ -1,4 +1,4 @@
-#include "packman.h"
+#include "packman_internal.h"
 
 typedef enum packman_error (*packman_encoding_fn)(
 		struct packman_encoding_base *,
@@ -7,39 +7,24 @@ typedef enum packman_error (*packman_encoding_fn)(
 static enum packman_error __packman_encode(struct packman_encoding_base *,
 		const void *, void **, size_t *);
 
+static enum packman_error __packman_encode_int(
+		struct packman_int_description *desc,
+		const void *obj, void **buf, size_t *count)
+{
+	enum packman_error ret;
+
+	ret = packman_do_int_desc(desc, *buf, obj, count);
+	*buf += desc->size;
+	return ret;
+}
+
 static enum packman_error packman_encode_int(
 		struct packman_encoding_base *base,
 		const void *obj, void **buf, size_t *count)
 {
 	struct packman_encoding_int *encoding = (void *)base;
 
-	if (*count < encoding->desc.size)
-		return PACKMAN_ERROR_BUF_TOO_SMALL;
-	switch (encoding->desc.size) {
-	case sizeof(uint8_t):
-		*(uint8_t *)*buf = *(const uint8_t *)obj;
-		break;
-	#define PACKMAN_ENCODE_INT_CASE(n) \
-	case sizeof(uint##n##_t): { \
-		uint##n##_t value = *(const uint##n##_t *)obj; \
-		uint##n##_t *target = *buf; \
-		switch (encoding->desc.endianness) { \
-		case PACKMAN_ENDIANNESS_BIG: \
-			*target = htobe##n(value); \
-			break; \
-		case PACKMAN_ENDIANNESS_LITTLE: \
-			*target = htole##n(value); \
-			break; \
-		} \
-		} \
-		break
-	PACKMAN_ENCODE_INT_CASE(16);
-	PACKMAN_ENCODE_INT_CASE(32);
-	PACKMAN_ENCODE_INT_CASE(64);
-	}
-	*buf += encoding->desc.size;
-	*count -= encoding->desc.size;
-	return PACKMAN_ERROR_SUCCESS;
+	return __packman_encode_int(&encoding->desc, obj, buf, count);
 }
 
 static enum packman_error packman_encode_struct(

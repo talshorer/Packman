@@ -1,4 +1,4 @@
-OBJS := packman_encode.o packman_decode.o
+OBJS := packman_common.o packman_encode.o packman_decode.o
 
 LIBNAME := packman
 LIB := lib$(LIBNAME).so
