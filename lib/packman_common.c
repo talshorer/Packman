@@ -1,7 +1,8 @@
 #include "packman_internal.h"
 
-enum packman_error packman_do_int_desc(struct packman_int_description *desc,
-		void *_target, const void *_value, size_t *count)
+enum packman_error packman_do_int_desc(
+		const struct packman_int_description *desc, void *_target,
+		const void *_value, size_t *count)
 {
 	if (*count < desc->size)
 		return PACKMAN_ERROR_BUF_TOO_SMALL;
@@ -30,4 +31,27 @@ enum packman_error packman_do_int_desc(struct packman_int_description *desc,
 	}
 	*count -= desc->size;
 	return PACKMAN_ERROR_SUCCESS;
+}
+
+bool packman_enum_value_valid(const struct packman_encoding_enum *encoding,
+		const void *value)
+{
+	unsigned int i;
+
+	for (i = 0; i < encoding->nvalues; i++) {
+		switch (encoding->desc.size) {
+		#define PACKMAN_ENUM_VALIDITY_CASE(n) \
+		case sizeof(uint##n##_t): \
+			if (*(uint##n##_t *)value == \
+					((uint##n##_t *)encoding->values)[i]) \
+				return true; \
+		break
+		PACKMAN_ENUM_VALIDITY_CASE(8);
+		PACKMAN_ENUM_VALIDITY_CASE(16);
+		PACKMAN_ENUM_VALIDITY_CASE(32);
+		PACKMAN_ENUM_VALIDITY_CASE(64);
+		#undef PACKMAN_ENUM_VALIDITY_CASE
+		}
+	}
+	return false;
 }

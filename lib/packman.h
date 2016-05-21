@@ -3,12 +3,14 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <stdbool.h>
 #include <endian.h>
 
 enum packman_error {
 	PACKMAN_ERROR_SUCCESS = 0,
 	PACKMAN_ERROR_NO_SUCH_ENCODING_TYPE,
 	PACKMAN_ERROR_BUF_TOO_SMALL,
+	PACKMAN_ERROR_INVALID_VALUE,
 };
 
 enum packman_encoding_type {
@@ -24,10 +26,10 @@ struct packman_encoding_base {
 	size_t elem_size;
 };
 
-enum packman_error packman_encode(struct packman_encoding_base *,
+enum packman_error packman_encode(const struct packman_encoding_base *,
 		const void *, void *, size_t);
 
-enum packman_error packman_decode(struct packman_encoding_base *,
+enum packman_error packman_decode(const struct packman_encoding_base *,
 		void *, const void *, size_t);
 
 enum packman_endianness {
@@ -54,7 +56,7 @@ struct packman_encoding_struct {
 struct packman_encoding_enum {
 	struct packman_encoding_base base;
 	struct packman_int_description desc;
-	void *values; /* should be array of uint##n##_t */
+	const void *values; /* should be array of uint##n##_t */
 	unsigned nvalues;
 };
 
