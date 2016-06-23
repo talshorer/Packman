@@ -49,7 +49,7 @@ struct packman_encoding_int {
 
 struct packman_encoding_struct {
 	struct packman_encoding_base base;
-	struct packman_encoding_base **fields;
+	const struct packman_encoding_base **fields;
 	unsigned nfields;
 };
 

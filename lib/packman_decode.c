@@ -39,7 +39,7 @@ static enum packman_error packman_decode_struct(
 		err = __packman_decode(encoding->fields[i], obj, buf, count);
 		if (err)
 			return err;
-		obj += base->elem_size;
+		obj += encoding->fields[i]->elem_size;
 	}
 	return PACKMAN_ERROR_SUCCESS;
 }
